@@ -70,6 +70,7 @@ PUSHD "%FILE_DIR%"
 SET "COMMON=%FILE_DIR%\common.bat"
 
 CALL "%COMMON%" :SubPreBuild
+REM Calling SubPreBuild
 IF %ERRORLEVEL% NEQ 0 GOTO MissingVar
 
 FOR %%G IN (%*) DO SET /A INPUT+=1
@@ -89,9 +90,11 @@ IF /I "%MPCHC_LITE%" == "True"  IF "%NO_LITE%" == "True" GOTO UnsupportedSwitch
 IF /I "%CLEAN%" == "LAVFilters" IF "%NO_LAV%" == "True"  GOTO UnsupportedSwitch
 
 IF NOT EXIST "%MPCHC_VS_PATH%" CALL "%COMMON%" :SubVSPath
+REM Checking for MPCHC_VS_PATH
 IF NOT EXIST "!MPCHC_VS_PATH!" GOTO MissingVar
 SET "TOOLSET=!MPCHC_VS_PATH!\Common7\Tools\vsdevcmd"
 SET "BIN_DIR=bin"
+REM Checking for TOOLSET
 IF NOT EXIST "%TOOLSET%" GOTO MissingVar
 
 IF EXIST "%FILE_DIR%signinfo.txt" (
@@ -137,6 +140,7 @@ IF %ERRORLEVEL% NEQ 0 ENDLOCAL & EXIT /B
 
 IF /I "%PPLATFORM%" == "Win32" (SET ARCH=x86) ELSE (SET ARCH=amd64)
 CALL "%TOOLSET%" -no_logo -arch=%ARCH% -winsdk=%MPCHC_WINSDK_VER%
+REM TOOLSET called for comp
 IF %ERRORLEVEL% NEQ 0 GOTO MissingVar
 
 IF /I "%CONFIG%" == "Filters" (
